@@ -1,0 +1,92 @@
+@import "../../node_modules/tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+    /* --- Raw RGB Values (The Data Layer) --- */
+    --rgb-background-app: 255, 255, 255;
+    --rgb-primary-900: 74, 109, 255;
+    --rgb-primary-800: 92, 124, 255;
+    --rgb-primary-700: 110, 138, 255;
+    --rgb-primary-600: 128, 153, 255;
+    --rgb-primary-500: 146, 167, 255;
+    --rgb-primary-400: 164, 182, 255;
+    --rgb-primary-300: 183, 197, 255;
+    --rgb-primary-200: 201, 211, 255;
+    --rgb-primary-100: 219, 226, 255;
+    --rgb-primary-50: 228, 233, 255;
+
+    --rgb-secondary-900: 17, 24, 39;
+    --rgb-secondary-800: 31, 41, 55;
+    --rgb-secondary-700: 55, 65, 81;
+    --rgb-secondary-600: 75, 85, 99;
+    --rgb-secondary-500: 107, 114, 128;
+    --rgb-secondary-400: 156, 163, 175;
+    --rgb-secondary-300: 209, 213, 219;
+    --rgb-secondary-200: 229, 231, 235;
+    --rgb-secondary-100: 243, 244, 246;
+    --rgb-secondary-50: 249, 250, 251;
+    --rgb-secondary-0: 255, 255, 255;
+
+    --rgb-success: 0, 192, 115;
+    --rgb-warning: 255, 153, 0;
+    --rgb-error: 255, 71, 87;
+    --rgb-red-500: 239, 68, 68;
+    --rgb-red-300: 252, 165, 165;
+    --rgb-backdrop: 255, 255, 255;
+}
+
+/* --- Dark Mode Overrides --- */
+.dark {
+    --rgb-secondary-900: 249, 250, 251;
+    --rgb-secondary-800: 243, 244, 246;
+    --rgb-secondary-700: 229, 231, 235;
+    --rgb-secondary-600: 209, 213, 219;
+    --rgb-secondary-500: 156, 163, 175;
+    --rgb-secondary-400: 107, 114, 128;
+    --rgb-secondary-300: 75, 85, 99;
+    --rgb-secondary-200: 55, 65, 81;
+    --rgb-secondary-100: 31, 41, 55;
+    --rgb-secondary-50: 17, 24, 39;
+    --rgb-secondary-0: 24, 33, 47;
+    --rgb-backdrop: 0, 0, 0;
+}
+
+@theme {
+    /* --- Tailwind Mapping (The Interface Layer) --- */
+    --color-primary-900: rgb(var(--rgb-primary-900));
+    --color-primary-800: rgb(var(--rgb-primary-800));
+    --color-primary-700: rgb(var(--rgb-primary-700));
+    --color-primary-600: rgb(var(--rgb-primary-600));
+    --color-primary-500: rgb(var(--rgb-primary-500));
+    --color-primary-400: rgb(var(--rgb-primary-400));
+    --color-primary-300: rgb(var(--rgb-primary-300));
+    --color-primary-200: rgb(var(--rgb-primary-200));
+    --color-primary-100: rgb(var(--rgb-primary-100));
+    --color-primary-50: rgb(var(--rgb-primary-50));
+
+    --color-secondary-900: rgb(var(--rgb-secondary-900));
+    --color-secondary-800: rgb(var(--rgb-secondary-800));
+    --color-secondary-700: rgb(var(--rgb-secondary-700));
+    --color-secondary-600: rgb(var(--rgb-secondary-600));
+    --color-secondary-500: rgb(var(--rgb-secondary-500));
+    --color-secondary-400: rgb(var(--rgb-secondary-400));
+    --color-secondary-300: rgb(var(--rgb-secondary-300));
+    --color-secondary-200: rgb(var(--rgb-secondary-200));
+    --color-secondary-100: rgb(var(--rgb-secondary-100));
+    --color-secondary-50: rgb(var(--rgb-secondary-50));
+    --color-secondary-0: rgb(var(--rgb-secondary-0));
+
+    --color-success: rgb(var(--rgb-success));
+    --color-warning: rgb(var(--rgb-warning));
+    --color-error: rgb(var(--rgb-error));
+    --color-red-500: rgb(var(--rgb-red-500));
+    --color-red-300: rgb(var(--rgb-red-300));
+
+    --color-app-bg: rgb(var(--rgb-background-app));
+    --color-backdrop: rgb(var(--rgb-backdrop));
+}
+
+.container {
+    padding: 1rem;
+}
