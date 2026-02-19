@@ -1,23 +1,36 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGetOtp } from "@/features/auth/api/useGetOtp.ts";
 import { LoginSchema, type Login } from "@/features/auth/schemas/auth.schema.ts";
 import { toast } from "sonner";
+import { type PhoneValue } from "@/features/auth/types/auth.types.ts";
+import { Button } from "@/components/ui/Button.tsx";
+import { TextField } from "@/components/ui/TextField.tsx";
 
 type OtpProps = {
     handleSuccessOtp: (phoneNumber: Login['phoneNumber']) => void;
+    currentPhoneNumber: PhoneValue
 };
 
-export const SendOtpForm = ({ handleSuccessOtp }: OtpProps) => {
+export const SendOtpForm = ({ handleSuccessOtp, currentPhoneNumber }: OtpProps) => {
     const { mutateAsync, isPending } = useGetOtp();
 
     const {
         register,
         handleSubmit,
+        setFocus,
         formState: { errors },
     } = useForm<Login>({
-        resolver: zodResolver(LoginSchema)
+        resolver: zodResolver(LoginSchema),
+        defaultValues: {
+            phoneNumber: currentPhoneNumber
+        }
     });
+
+    useEffect(() => {
+        setFocus("phoneNumber");
+    }, [setFocus])
 
     const onSubmit = (data: Login) => {
         const promise = mutateAsync(data);
@@ -34,28 +47,20 @@ export const SendOtpForm = ({ handleSuccessOtp }: OtpProps) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-700">شماره تماس</label>
-                <input
-                    {...register('phoneNumber')}
-                    placeholder="0912xxxxxxx"
-                    className={`p-2 border rounded-md ${errors.phoneNumber ? 'border-red-500' : 'border-gray-300'}`}
-                    disabled={isPending}
-                />
-                {errors.phoneNumber && (
-                    <p className="text-xs text-red-500 mt-1">{errors.phoneNumber.message}</p>
-                )}
-            </div>
-
-            <button
-                type="submit"
+            <TextField
+                {...register('phoneNumber')}
+                id="phone-number"
+                label="شماره تماس"
+                placeholder="0912xxxxxxx"
+                maxLength={11}
+                error={errors.phoneNumber?.message}
+                className="text-center tracking-[1em]"
                 disabled={isPending}
-                className={`w-full py-2 px-4 rounded-md text-white transition-all ${
-                    isPending ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-                }`}
-            >
-                {isPending ? 'در حال پردازش...' : 'ارسال کد تایید'}
-            </button>
+            />
+
+            <Button type="submit" isLoading={isPending}>
+                ارسال کد تایید
+            </Button>
         </form>
     )
 }

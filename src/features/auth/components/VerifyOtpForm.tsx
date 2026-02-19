@@ -1,16 +1,23 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckOtpSchema, type CheckOtp } from "@/features/auth/schemas/auth.schema.ts";
-import { type PhoneValue } from "@/features/auth/types/auth.types.ts";
+import { type PhoneValue, type UnixTimestamp } from "@/features/auth/types/auth.types.ts";
 import { useCheckOtp } from "@/features/auth/api/useCheckOtp.ts";
+import { Button } from "@/components/ui/Button.tsx";
+import { TextField } from "@/components/ui/TextField.tsx";
+import { useCountdown } from "@/features/auth/hooks/useCountdown.ts";
 
 type VerifyOtpProps = {
+    onResendOtp: () => void;
     phoneNumber: PhoneValue;
+    otpExpiryTime: UnixTimestamp;
     goToSendOtp: () => void;
 }
 
-export const VerifyOtpForm = ({ phoneNumber, goToSendOtp }: VerifyOtpProps) => {
+export const VerifyOtpForm = ({ onResendOtp, phoneNumber, otpExpiryTime, goToSendOtp }: VerifyOtpProps) => {
     const { mutate, isPending } = useCheckOtp();
+
+    const { seconds, isFinished } = useCountdown(otpExpiryTime);
 
     const {
         register,
@@ -40,32 +47,26 @@ export const VerifyOtpForm = ({ phoneNumber, goToSendOtp }: VerifyOtpProps) => {
 
             <input type="hidden" {...register('phoneNumber')} />
 
-            <div className="flex flex-col gap-2">
-                <input
-                    {...register('otp')}
-                    className="w-full p-3 bg-gray-900 rounded border border-gray-700 focus:border-blue-500 transition-all text-center tracking-[1em]"
-                    placeholder="000000"
-                    maxLength={6}
-                />
-                {errors.otp && <p className="text-red-500 text-xs">{errors.otp.message}</p>}
-            </div>
+            <TextField
+                {...register('otp')}
+                placeholder="000000"
+                maxLength={6}
+                error={errors.otp?.message}
+                className="text-center tracking-[1em]"
+            />
 
             <div className="flex flex-col gap-3 pt-2">
-                <button
-                    type="submit"
-                    disabled={isPending}
-                    className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-md font-bold disabled:opacity-50 transition-colors"
-                >
-                    {isPending ? 'در حال پردازش...' : 'تایید کد و ورود'}
-                </button>
-
-                <button
-                    type="button"
-                    onClick={goToSendOtp}
-                    className="w-full py-2 text-sm text-gray-400 hover:text-white transition-colors"
-                >
+                <Button type="submit" isLoading={isPending}>تایید کد و ورود</Button>
+                <Button type="button" variant="secondary" onClick={goToSendOtp}>
                     اصلاح شماره تماس / بازگشت
-                </button>
+                </Button>
+                <Button
+                    type="button"
+                    disabled={ !isFinished }
+                    onClick={ onResendOtp }
+                >
+                    {isFinished ? 'ارسال مجدد کد' : `ارسال مجدد در ${seconds} ثانیه`}
+                </Button>
             </div>
         </form>
     );
