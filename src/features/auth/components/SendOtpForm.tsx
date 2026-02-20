@@ -36,12 +36,14 @@ export const SendOtpForm = ({ handleSuccessOtp, currentPhoneNumber }: OtpProps) 
         const promise = mutateAsync(data);
 
         toast.promise(promise, {
-            loading: 'در حال ارسال کد به کهکشان...',
+            loading: 'در حال ارسال کد',
             success: () => {
                 handleSuccessOtp(data.phoneNumber);
                 return "کد تایید با موفقیت ارسال شد";
             },
-            error: 'خطا در برقراری ارتباط با مرکز اسناد',
+            error: (err) => {
+                return err.response?.data?.message;
+            },
         });
     }
 

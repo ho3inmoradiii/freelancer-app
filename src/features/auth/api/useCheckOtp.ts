@@ -26,7 +26,6 @@ export const useCheckOtp = () => {
     return useMutation({
         mutationFn: checkOtp,
         onSuccess: (responseData) => {
-            console.log('[احراز هویت]: کد OTP با موفقیت تایید شد.');
             queryClient.setQueryData(queryKeys.auth.user(), responseData.data.user);
         },
         onError: (error) => {

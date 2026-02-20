@@ -6,6 +6,8 @@ import { useCheckOtp } from "@/features/auth/api/useCheckOtp.ts";
 import { Button } from "@/components/ui/Button.tsx";
 import { TextField } from "@/components/ui/TextField.tsx";
 import { useCountdown } from "@/features/auth/hooks/useCountdown.ts";
+import {toast} from "sonner";
+import { useNavigate } from 'react-router-dom';
 
 type VerifyOtpProps = {
     onResendOtp: () => void;
@@ -15,9 +17,11 @@ type VerifyOtpProps = {
 }
 
 export const VerifyOtpForm = ({ onResendOtp, phoneNumber, otpExpiryTime, goToSendOtp }: VerifyOtpProps) => {
-    const { mutate, isPending } = useCheckOtp();
+    const { mutateAsync, isPending } = useCheckOtp();
 
     const { seconds, isFinished } = useCountdown(otpExpiryTime);
+
+    const navigate = useNavigate();
 
     const {
         register,
@@ -31,9 +35,16 @@ export const VerifyOtpForm = ({ onResendOtp, phoneNumber, otpExpiryTime, goToSen
     });
 
     const onSubmit = (data: CheckOtp) => {
-        mutate(data, {
-            onSuccess: (responseData) => {
-                console.log('[Auth]: Verification successful!', responseData);
+        const promise = mutateAsync(data);
+
+        toast.promise(promise, {
+            loading: 'در حال بررسی کد',
+            success: () => {
+                navigate('/dashboard')
+                return "ورود با موفقیت انجام شد";
+            },
+            error: (err) => {
+                return err.response?.data?.message;
             },
         });
     }
@@ -56,8 +67,17 @@ export const VerifyOtpForm = ({ onResendOtp, phoneNumber, otpExpiryTime, goToSen
             />
 
             <div className="flex flex-col gap-3 pt-2">
-                <Button type="submit" isLoading={isPending}>تایید کد و ورود</Button>
-                <Button type="button" variant="secondary" onClick={goToSendOtp}>
+                <Button
+                    type="submit"
+                    isLoading={ isPending }
+                >
+                    تایید کد و ورود
+                </Button>
+                <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={ goToSendOtp }
+                >
                     اصلاح شماره تماس / بازگشت
                 </Button>
                 <Button

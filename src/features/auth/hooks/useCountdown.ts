@@ -1,34 +1,41 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useSyncExternalStore } from 'react';
 
-export const useCountdown = (targetTimestamp: number | null) => {
-    const calculateTimeLeft = useCallback(() => {
-        if (!targetTimestamp) return 0;
-        const diff = Math.floor((targetTimestamp - Date.now()) / 1000);
-        return diff > 0 ? diff : 0;
-    }, [targetTimestamp]);
+let lastTick = Date.now();
+const listeners = new Set<() => void>();
 
-    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+const timeStore = {
+    subscribe(onStoreChange: () => void) {
+        listeners.add(onStoreChange);
 
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setTimeLeft(calculateTimeLeft());
-    }, [targetTimestamp, calculateTimeLeft])
+        lastTick = Date.now();
 
-    useEffect(() => {
-        if (!targetTimestamp || timeLeft <= 0) return;
-
-        const timer = setInterval(() => {
-            const nextValue = calculateTimeLeft();
-            setTimeLeft(nextValue);
-
-            if (nextValue <= 0) clearInterval(timer);
+        const interval = setInterval(() => {
+            lastTick = Date.now();
+            listeners.forEach(l => l());
         }, 1000);
 
-        return () => clearInterval(timer);
-    }, [targetTimestamp, timeLeft, calculateTimeLeft]);
+        return () => {
+            clearInterval(interval);
+            listeners.delete(onStoreChange);
+        };
+    },
+    getSnapshot: () => lastTick,
+    getServerSnapshot: () => 0
+};
+
+export const useCountdown = (targetTimestamp: number | null) => {
+    const now = useSyncExternalStore(
+        timeStore.subscribe,
+        timeStore.getSnapshot,
+        timeStore.getServerSnapshot
+    );
+
+    const seconds = targetTimestamp
+        ? Math.max(0, Math.floor((targetTimestamp - now) / 1000))
+        : 0;
 
     return {
-        seconds: timeLeft,
-        isFinished: timeLeft <= 0,
+        seconds,
+        isFinished: targetTimestamp !== null && seconds <= 0,
     };
 };

@@ -1,5 +1,5 @@
 import { createBrowserRouter, type RouteObject } from 'react-router-dom';
-import { AuthPage } from '@/features/auth/pages/AuthPage';
+import { AuthPage } from '@/pages/AuthPage.tsx';
 
 const routes: RouteObject[] = [
     {
