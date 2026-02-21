@@ -1,7 +1,8 @@
 import { createBrowserRouter, type RouteObject } from 'react-router-dom';
-import { AuthPage } from '@/pages/AuthPage.tsx';
 import { ProtectedRoutes } from "@/router/guards/ProtectedRoutes.tsx";
 import { PublicRoutes } from "@/router/guards/PublicRoutes.tsx";
+import { AuthPage } from '@/pages/AuthPage.tsx';
+import { CompleteProfile } from "@/pages/CompleteProfile.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -18,7 +19,7 @@ const routes: RouteObject[] = [
         children: [
             {
                 path: '/complete-profile',
-                element: <div>صفحه تکمیل پروفایل</div>,
+                element: <CompleteProfile />,
             },
             {
                 path: '/dashboard',
