@@ -26,7 +26,7 @@ export const useCheckOtp = () => {
     return useMutation({
         mutationFn: checkOtp,
         onSuccess: (responseData) => {
-            queryClient.setQueryData(queryKeys.auth.user(), responseData.data.user);
+            queryClient.setQueryData(queryKeys.user.profile(), responseData.data.user);
         },
         onError: (error) => {
             if (isAxiosError(error)) {

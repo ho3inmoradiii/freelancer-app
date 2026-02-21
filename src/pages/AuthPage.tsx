@@ -5,8 +5,10 @@ import { type PhoneValue, type AuthState } from "@/features/auth/types/auth.type
 import { useGetOtp } from "@/features/auth/api/useGetOtp.ts";
 import { toast } from "sonner";
 import { storage } from "@/utils/storage.ts";
+import { type VerifyOtpResponse } from "@/features/auth/schemas/auth.schema.ts";
+import { useNavigate } from 'react-router-dom';
 
-const expiryTime = 120000;
+const expiryTime = 90000;
 
 const getInitialAuthState = () => {
     const otpDataSaved = storage.get('otpData');
@@ -25,6 +27,8 @@ export const AuthPage = () => {
     const [authState, setAuthState] = useState<AuthState>(() => getInitialAuthState());
 
     const { mutateAsync } = useGetOtp();
+
+    const navigate = useNavigate();
 
     const handleOtp = (phoneNumber: PhoneValue) => {
         const targetTime = Date.now() + expiryTime;
@@ -50,6 +54,11 @@ export const AuthPage = () => {
         storage.remove('otpData');
     }
 
+    const handleVerifySuccess = (res: VerifyOtpResponse) => {
+        storage.remove('otpData');
+        if (!res.data.user.isActive) navigate('/complete-profile');
+    }
+
     return (
         <div className="container">
             {
@@ -65,6 +74,7 @@ export const AuthPage = () => {
                         phoneNumber={ authState.phoneNumber }
                         otpExpiryTime={ authState.otpExpiryTime }
                         onResendOtp={ handleResendOtp }
+                        onVerifySuccess={ handleVerifySuccess }
                     />
             }
         </div>

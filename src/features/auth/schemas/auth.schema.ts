@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { UserSchema } from "@/features/user/schemas/user.schema.ts";
 
 export const LoginSchema = z.object({
     phoneNumber: z
@@ -37,14 +38,6 @@ export const CheckOtpSchema = z.object({
 })
 
 export type CheckOtp = z.infer<typeof CheckOtpSchema>;
-
-export const UserSchema = z.object({
-    _id: z.string(),
-    phoneNumber: z.string(),
-    role: z.enum(['OWNER', 'ADMIN', 'FREELANCER']),
-    isActive: z.boolean(),
-    status: z.number(),
-});
 
 export const VerifyOtpResponseSchema = z.object({
     statusCode: z.number(),

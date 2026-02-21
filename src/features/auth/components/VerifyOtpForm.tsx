@@ -1,27 +1,25 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckOtpSchema, type CheckOtp } from "@/features/auth/schemas/auth.schema.ts";
+import { CheckOtpSchema, type CheckOtp, type VerifyOtpResponse } from "@/features/auth/schemas/auth.schema.ts";
 import { type PhoneValue, type UnixTimestamp } from "@/features/auth/types/auth.types.ts";
 import { useCheckOtp } from "@/features/auth/api/useCheckOtp.ts";
 import { Button } from "@/components/ui/Button.tsx";
 import { TextField } from "@/components/ui/TextField.tsx";
 import { useCountdown } from "@/features/auth/hooks/useCountdown.ts";
-import {toast} from "sonner";
-import { useNavigate } from 'react-router-dom';
+import { toast } from "sonner";
 
 type VerifyOtpProps = {
     onResendOtp: () => void;
     phoneNumber: PhoneValue;
     otpExpiryTime: UnixTimestamp;
     goToSendOtp: () => void;
+    onVerifySuccess: (res: VerifyOtpResponse) => void;
 }
 
-export const VerifyOtpForm = ({ onResendOtp, phoneNumber, otpExpiryTime, goToSendOtp }: VerifyOtpProps) => {
+export const VerifyOtpForm = ({ onResendOtp, phoneNumber, otpExpiryTime, goToSendOtp, onVerifySuccess }: VerifyOtpProps) => {
     const { mutateAsync, isPending } = useCheckOtp();
 
     const { seconds, isFinished } = useCountdown(otpExpiryTime);
-
-    const navigate = useNavigate();
 
     const {
         register,
@@ -39,8 +37,8 @@ export const VerifyOtpForm = ({ onResendOtp, phoneNumber, otpExpiryTime, goToSen
 
         toast.promise(promise, {
             loading: 'در حال بررسی کد',
-            success: () => {
-                navigate('/dashboard')
+            success: (res) => {
+                onVerifySuccess(res)
                 return "ورود با موفقیت انجام شد";
             },
             error: (err) => {
