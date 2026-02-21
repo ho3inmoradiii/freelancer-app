@@ -20,10 +20,14 @@ export const GetProfileResponseSchema = z.object({
 export type GetProfileResponse = z.infer<typeof GetProfileResponseSchema>;
 
 export const CompleteProfileSchema = z.object({
-    name: z.string().min(3, "نام کاربری باید حداقل ۳ کاراکتر باشه، مورتی!"),
-    email: z.string(),
+    name: z.string()
+        .min(3, "نام کاربری باید حداقل ۳ کاراکتر باشه!"),
+    email: z.string()
+        .trim()
+        .toLowerCase()
+        .email("ایمیل درستی رو وارد کنید"),
     role: z.enum(["OWNER", "FREELANCER"], {
-        errorMap: () => ({ message: "باید یکی از این دوتا بُعد رو انتخاب کنی!" }),
+        errorMap: () => ({ message: "انتخاب یکی از نقش ها اجباری است!" }),
     }),
 })
 

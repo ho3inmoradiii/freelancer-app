@@ -68,6 +68,7 @@ export const VerifyOtpForm = ({ onResendOtp, phoneNumber, otpExpiryTime, goToSen
                 <Button
                     type="submit"
                     isLoading={ isPending }
+                    disabled={ isPending }
                 >
                     تایید کد و ورود
                 </Button>
@@ -83,7 +84,7 @@ export const VerifyOtpForm = ({ onResendOtp, phoneNumber, otpExpiryTime, goToSen
                     disabled={ !isFinished }
                     onClick={ onResendOtp }
                 >
-                    {isFinished ? 'ارسال مجدد کد' : `ارسال مجدد در ${seconds} ثانیه`}
+                    { isFinished ? 'ارسال مجدد کد' : `ارسال مجدد در ${seconds} ثانیه` }
                 </Button>
             </div>
         </form>

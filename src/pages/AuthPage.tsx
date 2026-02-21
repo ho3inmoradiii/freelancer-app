@@ -56,7 +56,8 @@ export const AuthPage = () => {
 
     const handleVerifySuccess = (res: VerifyOtpResponse) => {
         storage.remove('otpData');
-        if (!res.data.user.isActive) navigate('/complete-profile');
+        if (!res.data.user.isActive) navigate('/complete-profile')
+        else navigate('/dashboard')
     }
 
     return (

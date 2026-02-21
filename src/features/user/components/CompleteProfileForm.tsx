@@ -50,11 +50,13 @@ export const CompleteProfileForm = ({ onCompleteSuccess }: CompleteProfileProps)
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <TextField
                 {...register('name')}
-                placeholder="نام خود را وارد کنید"
+                label="نام و نام خانوادگی"
+                placeholder="نام و نام خانوادگی خود را وارد کنید"
                 error={errors.name?.message}
             />
             <TextField
                 {...register('email')}
+                label="ایمیل"
                 placeholder="ایمیل خود را وارد کنید"
                 error={errors.email?.message}
             />
@@ -63,7 +65,7 @@ export const CompleteProfileForm = ({ onCompleteSuccess }: CompleteProfileProps)
                 control={control}
                 render={({ field }) => (
                     <RadioGroup
-                        label="نقش خودت رو مشخص کن"
+                        label="نقش خود را انتخاب کنید"
                         name={field.name}
                         options={[
                             { label: "کارفرما (Owner)", value: "OWNER" },
@@ -76,7 +78,11 @@ export const CompleteProfileForm = ({ onCompleteSuccess }: CompleteProfileProps)
                     />
                 )}
             />
-            <Button type="submit" isLoading={ isPending }>
+            <Button
+                type="submit"
+                isLoading={ isPending }
+                disabled={ isPending }
+            >
                 تایید
             </Button>
         </form>
