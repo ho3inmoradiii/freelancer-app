@@ -30,14 +30,14 @@ export const RadioGroup = ({
     return (
         <div className={cn("flex flex-col gap-3", className)}>
             {label && (
-                <span className="text-sm font-semibold text-gray-400 mb-1">
+                <label className="text-xs font-semibold text-brand-text-muted uppercase tracking-wider mr-1">
                     {label}
-                </span>
+                </label>
             )}
 
             <div
                 className={cn(
-                    "flex gap-4",
+                    "flex gap-6 p-1",
                     orientation === "vertical" ? "flex-col" : "flex-row flex-wrap"
                 )}
             >
@@ -55,8 +55,8 @@ export const RadioGroup = ({
             </div>
 
             {error && (
-                <p className="text-xs text-red-500 mt-1 animate-in fade-in slide-in-from-top-1">
-                    {error}
+                <p className="text-xs text-red-400 mt-1 animate-in fade-in slide-in-from-top-1 flex items-center gap-1">
+                    <span className="w-1 h-1 rounded-full bg-red-500" /> {error}
                 </p>
             )}
         </div>

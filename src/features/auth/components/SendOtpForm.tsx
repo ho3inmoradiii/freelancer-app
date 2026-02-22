@@ -56,7 +56,7 @@ export const SendOtpForm = ({ handleSuccessOtp, currentPhoneNumber }: OtpProps) 
                 placeholder="0912xxxxxxx"
                 maxLength={11}
                 error={errors.phoneNumber?.message}
-                className="text-center tracking-[1em]"
+                className="text-center tracking-[2px]"
                 disabled={isPending}
             />
 

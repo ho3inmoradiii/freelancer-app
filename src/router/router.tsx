@@ -8,12 +8,12 @@ import { HomePage } from "@/pages/HomePage.tsx";
 
 const routes: RouteObject[] = [
     {
+        path: '/',
+        element: <HomePage />,
+    },
+    {
         element: <PublicRoutes />,
         children: [
-            {
-                path: '/',
-                element: <HomePage />,
-            },
             {
                 path: '/auth',
                 element: <AuthPage />,

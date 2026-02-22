@@ -61,23 +61,37 @@ export const AuthPage = () => {
     }
 
     return (
-        <div className="container">
-            {
-                authState.step === 'SEND_OTP'
-                    ?
-                    <SendOtpForm
-                        handleSuccessOtp={ handleOtp }
-                        currentPhoneNumber={ authState.phoneNumber }
-                    />
-                    :
-                    <VerifyOtpForm
-                        goToSendOtp={ handleBackButton }
-                        phoneNumber={ authState.phoneNumber }
-                        otpExpiryTime={ authState.otpExpiryTime }
-                        onResendOtp={ handleResendOtp }
-                        onVerifySuccess={ handleVerifySuccess }
-                    />
-            }
+        <div className="flex min-h-screen items-center justify-center p-4">
+            <div className="w-full max-w-md bg-brand-surface border border-brand-border rounded-2xl p-8 shadow-2xl backdrop-blur-sm relative overflow-hidden">
+
+                <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-600/10 blur-3xl rounded-full" />
+
+                <div className="relative z-10">
+                    <header className="text-center mb-8">
+                        <h1 className="text-2xl font-bold tracking-tight mb-2">خوش آمدید</h1>
+                        <p className="text-brand-text-muted text-sm">
+                            {authState.step === 'SEND_OTP'
+                                ? 'برای ورود شماره موبایل خود را وارد کنید'
+                                : 'کد تایید ارسال شده را وارد کنید'}
+                        </p>
+                    </header>
+
+                    {authState.step === 'SEND_OTP' ? (
+                        <SendOtpForm
+                            handleSuccessOtp={handleOtp}
+                            currentPhoneNumber={authState.phoneNumber}
+                        />
+                    ) : (
+                        <VerifyOtpForm
+                            goToSendOtp={handleBackButton}
+                            phoneNumber={authState.phoneNumber}
+                            otpExpiryTime={authState.otpExpiryTime}
+                            onResendOtp={handleResendOtp}
+                            onVerifySuccess={handleVerifySuccess}
+                        />
+                    )}
+                </div>
+            </div>
         </div>
-    )
+    );
 }
