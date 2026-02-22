@@ -3,6 +3,8 @@ import { ProtectedRoutes } from "@/router/guards/ProtectedRoutes.tsx";
 import { PublicRoutes } from "@/router/guards/PublicRoutes.tsx";
 import { AuthPage } from '@/pages/AuthPage.tsx';
 import { CompleteProfile } from "@/pages/CompleteProfile.tsx";
+import { NotFoundPage } from "@/pages/NotFoundPage.tsx";
+import { HomePage } from "@/pages/HomePage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -10,6 +12,10 @@ const routes: RouteObject[] = [
         children: [
             {
                 path: '/',
+                element: <HomePage />,
+            },
+            {
+                path: '/auth',
                 element: <AuthPage />,
             },
         ]
@@ -27,6 +33,10 @@ const routes: RouteObject[] = [
             },
         ],
     },
+    {
+        path: '*',
+        element: <NotFoundPage />
+    }
 ];
 
 export const router = createBrowserRouter(routes);

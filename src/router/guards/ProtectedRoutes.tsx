@@ -8,7 +8,7 @@ export const ProtectedRoutes = () => {
     const { data: user, isPending, isError, isSuccess } = useUser();
 
     if (isPending) return <p>درحال دریافت اطلاعات</p>
-    else if (isError) return <Navigate to="/" replace />
+    else if (isError) return <Navigate to="/auth" replace />
     else if (isSuccess) {
         if (!user?.isActive && location.pathname !== '/complete-profile') return <Navigate to="/complete-profile" replace />
         if (user?.isActive && location.pathname === '/complete-profile') return <Navigate to="/dashboard" replace />
