@@ -5,37 +5,44 @@ import { AuthPage } from '@/pages/AuthPage.tsx';
 import { CompleteProfile } from "@/pages/CompleteProfile.tsx";
 import { NotFoundPage } from "@/pages/NotFoundPage.tsx";
 import { HomePage } from "@/pages/HomePage.tsx";
+import { RouterErrorElement } from "@/components/ui/RouterErrorElement.tsx";
 
 const routes: RouteObject[] = [
     {
         path: '/',
-        element: <HomePage />,
-    },
-    {
-        element: <PublicRoutes />,
+        errorElement: <RouterErrorElement />,
         children: [
             {
-                path: '/auth',
-                element: <AuthPage />,
+                index: true,
+                element: <HomePage />,
             },
+            {
+                element: <PublicRoutes />,
+                children: [
+                    {
+                        path: '/auth',
+                        element: <AuthPage />,
+                    },
+                ]
+            },
+            {
+                element: <ProtectedRoutes />,
+                children: [
+                    {
+                        path: '/complete-profile',
+                        element: <CompleteProfile />,
+                    },
+                    {
+                        path: '/dashboard',
+                        element: <div>داشبورد مدیریت پرونده‌ها</div>,
+                    },
+                ],
+            },
+            {
+                path: '*',
+                element: <NotFoundPage />
+            }
         ]
-    },
-    {
-        element: <ProtectedRoutes />,
-        children: [
-            {
-                path: '/complete-profile',
-                element: <CompleteProfile />,
-            },
-            {
-                path: '/dashboard',
-                element: <div>داشبورد مدیریت پرونده‌ها</div>,
-            },
-        ],
-    },
-    {
-        path: '*',
-        element: <NotFoundPage />
     }
 ];
 
