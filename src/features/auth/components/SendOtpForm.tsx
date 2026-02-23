@@ -51,7 +51,7 @@ export const SendOtpForm = ({ handleSuccessOtp, currentPhoneNumber }: OtpProps) 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <TextField
                 {...register('phoneNumber')}
-                id="phone-number"
+                    id="phone-number"
                 label="شماره تماس"
                 placeholder="0912xxxxxxx"
                 maxLength={11}

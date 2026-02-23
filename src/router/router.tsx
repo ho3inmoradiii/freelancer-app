@@ -6,6 +6,7 @@ import { CompleteProfile } from "@/pages/CompleteProfile.tsx";
 import { NotFoundPage } from "@/pages/NotFoundPage.tsx";
 import { HomePage } from "@/pages/HomePage.tsx";
 import { RouterErrorElement } from "@/components/ui/RouterErrorElement.tsx";
+import { MainLayout } from "@/layouts/MainLayout.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -29,12 +30,17 @@ const routes: RouteObject[] = [
                 element: <ProtectedRoutes />,
                 children: [
                     {
-                        path: '/complete-profile',
-                        element: <CompleteProfile />,
+                        element: <MainLayout />,
+                        children: [
+                            {
+                                path: '/dashboard',
+                                element: <div>داشبورد مدیریت پرونده‌ها</div>,
+                            },
+                        ],
                     },
                     {
-                        path: '/dashboard',
-                        element: <div>داشبورد مدیریت پرونده‌ها</div>,
+                        path: '/complete-profile',
+                        element: <CompleteProfile />,
                     },
                 ],
             },

@@ -1,11 +1,16 @@
 import { z } from 'zod';
 
+export const RoleEnum = z.enum(['OWNER', 'ADMIN', 'FREELANCER']);
+
+export type Role = z.infer<typeof RoleEnum>;
+
 export const UserSchema = z.object({
     _id: z.string(),
     phoneNumber: z.string(),
-    role: z.enum(['OWNER', 'ADMIN', 'FREELANCER']),
+    role: RoleEnum,
     isActive: z.boolean(),
     status: z.number(),
+    name: z.string(),
 });
 
 export type User = z.infer<typeof UserSchema>;
