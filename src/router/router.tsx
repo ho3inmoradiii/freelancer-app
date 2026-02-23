@@ -7,6 +7,7 @@ import { NotFoundPage } from "@/pages/NotFoundPage.tsx";
 import { HomePage } from "@/pages/HomePage.tsx";
 import { RouterErrorElement } from "@/components/ui/RouterErrorElement.tsx";
 import { MainLayout } from "@/layouts/MainLayout.tsx";
+import { CreateCategory } from "@/pages/CreateCategory.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -35,6 +36,15 @@ const routes: RouteObject[] = [
                             {
                                 path: '/dashboard',
                                 element: <div>داشبورد مدیریت پرونده‌ها</div>,
+                            },
+                            {
+                                path: '/admin',
+                                children: [
+                                    {
+                                        path: 'category',
+                                        element: <CreateCategory />
+                                    }
+                                ]
                             },
                         ],
                     },

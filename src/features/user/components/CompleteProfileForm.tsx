@@ -17,7 +17,12 @@ type CompleteProfileProps = {
 export const CompleteProfileForm = ({ onCompleteSuccess }: CompleteProfileProps) => {
     const { mutateAsync, isPending } = useCompleteProfile();
 
-    const { register, handleSubmit, control, formState: { errors } } = useForm<CompleteProfile>({
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors }
+    } = useForm<CompleteProfile>({
         resolver: zodResolver(CompleteProfileSchema),
         defaultValues: { name: "", email: "", role: undefined },
     });
