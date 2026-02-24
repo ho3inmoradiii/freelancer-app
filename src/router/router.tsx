@@ -8,6 +8,8 @@ import { HomePage } from "@/pages/HomePage.tsx";
 import { RouterErrorElement } from "@/components/ui/RouterErrorElement.tsx";
 import { MainLayout } from "@/layouts/MainLayout.tsx";
 import { CreateCategory } from "@/pages/CreateCategory.tsx";
+import { UnauthorizedPage } from "@/pages/UnauthorizedPage.tsx";
+import {RoleGuard} from "@/router/guards/RoleGuard.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -18,6 +20,10 @@ const routes: RouteObject[] = [
                 index: true,
                 element: <HomePage />,
             },
+            // {
+            //     path: '/unauthorized',
+            //     element: <UnauthorizedPage />,
+            // },
             {
                 element: <PublicRoutes />,
                 children: [
@@ -38,13 +44,11 @@ const routes: RouteObject[] = [
                                 element: <div>داشبورد مدیریت پرونده‌ها</div>,
                             },
                             {
+                                element: <RoleGuard allowedRoles={['ADMIN']} />,
                                 path: '/admin',
                                 children: [
-                                    {
-                                        path: 'category',
-                                        element: <CreateCategory />
-                                    }
-                                ]
+                                    { path: 'category', element: <CreateCategory /> }
+                                ],
                             },
                         ],
                     },
