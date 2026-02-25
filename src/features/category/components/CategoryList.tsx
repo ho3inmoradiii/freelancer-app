@@ -1,15 +1,38 @@
+import { useState } from "react";
 import { useCategories } from "@/features/category/api/useCategories.ts";
 import { Loader2, AlertCircle, Edit2, Trash2, ListTree, Database } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useNavigate } from "react-router-dom";
+import { useDeleteCategory } from "@/features/category/api/useDeleteCategory.ts";
+import { toast } from "sonner";
+import { DeleteCategoryDialog } from "@/features/category/components/DeleteCategoryDialog.tsx";
 
 export const CategoryList = () => {
     const navigate = useNavigate();
+    const { mutateAsync, isPending } = useDeleteCategory();
     const { data: response, isLoading, isError, error } = useCategories();
     const categories = response?.data?.categories || [];
+    const [deleteId, setDeleteId] = useState<string | null>(null);
 
     const editCategory = (categoryId: string) => {
         navigate(`/admin/category/edit/${categoryId}`);
+    }
+
+    const deleteCategory = () => {
+        if (deleteId) {
+            const promise = mutateAsync(deleteId);
+
+            toast.promise(promise, {
+                loading: 'در حال حذف دسته بندی',
+                success: (res) => {
+                    setDeleteId(null);
+                    return res?.data?.message;
+                },
+                error: (err) => {
+                    return err.response?.data?.message;
+                },
+            });
+        }
     }
 
     if (isLoading) {
@@ -97,6 +120,8 @@ export const CategoryList = () => {
                                     </button>
                                     <button
                                         className="p-2.5 rounded-xl bg-white/5 text-brand-text-muted hover:bg-red-500/20 hover:text-red-400 transition-all group/btn cursor-pointer"
+                                        onClick={() => setDeleteId(category._id)}
+                                        disabled={isPending}
                                     >
                                         <Trash2 className="w-4 h-4 group-hover/btn:scale-110" />
                                     </button>
@@ -116,6 +141,14 @@ export const CategoryList = () => {
                     </div>
                 )}
             </div>
+
+            <DeleteCategoryDialog
+                isOpen={!!deleteId}
+                onClose={() => setDeleteId(null)}
+                onConfirm={deleteCategory}
+                categoryTitle={categories.find(c => c._id === deleteId)?.title || ""}
+                isPending={isPending}
+            />
         </div>
     );
 };
