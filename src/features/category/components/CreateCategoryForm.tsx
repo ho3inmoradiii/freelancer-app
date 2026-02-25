@@ -1,20 +1,24 @@
-import { useCreateCategory } from "@/features/category/api/useCreateCategory.ts";
+import { useEffect } from "react";
 import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
-import { type Category, CategorySchema } from "@/features/category/schemas/category.schema.ts";
+import { type Category, CategorySchema, type Categories, type CategoryResponse } from "@/features/category/schemas/category.schema.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TextField } from "@/components/ui/TextField.tsx";
 import { Button } from "@/components/ui/Button.tsx";
 import { RadioGroup } from "@/components/ui/RadioGroup.tsx";
 import { Tag, Plus, Info } from "lucide-react";
 
-type CreateCategoryProps = {
-    onCreateCategorySuccess: () => void
+type CreateCategoryFormProps = {
+    formTitle: string;
+    formSubtitle?: string;
+    selectedCategory?: Categories;
+    btnText?: string;
+    onSubmitAction: (data: Category) => Promise<CategoryResponse>;
+    isLoading?: boolean;
+    onSuccessCallback?: () => void;
 }
 
-export const CreateCategoryForm = ({ onCreateCategorySuccess }: CreateCategoryProps) => {
-    const { mutateAsync, isPending } = useCreateCategory();
-
+export const CreateCategoryForm = ({ formTitle, formSubtitle, selectedCategory, btnText, onSubmitAction, isLoading, onSuccessCallback }: CreateCategoryFormProps) => {
     const {
         register,
         handleSubmit,
@@ -23,16 +27,22 @@ export const CreateCategoryForm = ({ onCreateCategorySuccess }: CreateCategoryPr
         formState: { errors }
     } = useForm<Category>({
         resolver: zodResolver(CategorySchema),
-        defaultValues: { title: "", description: "", englishTitle: "", type: undefined }
+        defaultValues: selectedCategory
     });
 
+    useEffect(() => {
+        if (selectedCategory) {
+            reset(selectedCategory);
+        }
+    }, [selectedCategory, reset]);
+
     const onSubmit = (data: Category) => {
-        const promise = mutateAsync(data);
+        const promise = onSubmitAction(data);
         toast.promise(promise, {
             loading: 'در حال ارسال اطلاعات',
             success: (res) => {
-                onCreateCategorySuccess();
-                reset();
+                if (!selectedCategory) reset();
+                if (onSuccessCallback) onSuccessCallback();
                 return res.data.message || "دسته بندی با موفقیت ثبت شد";
             },
             error: (err) => err.response?.data?.message || "اختلال در سیستم فرستنده!",
@@ -40,14 +50,14 @@ export const CreateCategoryForm = ({ onCreateCategorySuccess }: CreateCategoryPr
     };
 
     return (
-        <div className="max-w-4xl mx-auto">
+        <div>
             <div className="flex items-center gap-4 mb-10 border-r-4 border-brand-primary pr-6">
                 <div className="p-3 bg-brand-primary/10 rounded-2xl text-brand-primary">
                     <Tag className="w-8 h-8" />
                 </div>
                 <div>
-                    <h2 className="text-2xl font-black text-white">مدیریت دسته‌بندی‌ها</h2>
-                    <p className="text-brand-text-muted text-sm mt-1">ایجاد طبقه‌بندی جدید برای پروژه‌ها</p>
+                    <h2 className="text-2xl font-black text-white">{ formTitle ? formTitle : 'مدیریت دسته‌بندی‌ها' }</h2>
+                    <p className="text-brand-text-muted text-sm mt-1">{ formSubtitle }</p>
                 </div>
             </div>
 
@@ -109,12 +119,12 @@ export const CreateCategoryForm = ({ onCreateCategorySuccess }: CreateCategoryPr
 
                     <Button
                         type="submit"
-                        isLoading={isPending}
-                        disabled={isPending}
+                        isLoading={isLoading}
+                        disabled={isLoading}
                         className="w-full sm:w-64 h-14 text-lg shadow-lg shadow-brand-primary/20"
                     >
                         <Plus className="w-5 h-5 ml-2" />
-                        ثبت دسته بندی
+                        { btnText ? btnText : 'ثبت دسته بندی' }
                     </Button>
                 </div>
             </form>

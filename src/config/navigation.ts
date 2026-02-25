@@ -10,7 +10,7 @@ import { type SidebarItem } from "@/types/sidebar.ts";
 export const SIDEBAR_CONFIG: Record<Role, SidebarItem[]> = {
     ADMIN: [
         { href: "/admin/dashboard", title: "پنل مدیریت", icon: LayoutDashboard },
-        { href: "/admin/Category", title: "دسته بندی", icon: LayoutGrid },
+        { href: "/admin/category", title: "دسته بندی", icon: LayoutGrid },
         { href: "/admin/users", title: "مدیریت کاربران", icon: Users },
         { href: "/admin/projects", title: "همه پروژه‌ها", icon: Briefcase },
     ],

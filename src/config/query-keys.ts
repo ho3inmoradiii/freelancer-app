@@ -8,7 +8,12 @@ export const userKeys = {
     profile: () => [...userKeys.all, 'profile'] as const,
 }
 
+export const categoryKeys = {
+    all: ['category'] as const,
+}
+
 export const queryKeys = {
     auth: authKeys,
-    user: userKeys
+    user: userKeys,
+    category: categoryKeys,
 } as const;

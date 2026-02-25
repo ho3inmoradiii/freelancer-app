@@ -1,15 +1,16 @@
 import { createBrowserRouter, type RouteObject } from 'react-router-dom';
-import { ProtectedRoutes } from "@/router/guards/ProtectedRoutes.tsx";
-import { PublicRoutes } from "@/router/guards/PublicRoutes.tsx";
-import { AuthPage } from '@/pages/AuthPage.tsx';
-import { CompleteProfile } from "@/pages/CompleteProfile.tsx";
-import { NotFoundPage } from "@/pages/NotFoundPage.tsx";
-import { HomePage } from "@/pages/HomePage.tsx";
-import { RouterErrorElement } from "@/components/ui/RouterErrorElement.tsx";
-import { MainLayout } from "@/layouts/MainLayout.tsx";
-import { CreateCategory } from "@/pages/CreateCategory.tsx";
-import { UnauthorizedPage } from "@/pages/UnauthorizedPage.tsx";
-import {RoleGuard} from "@/router/guards/RoleGuard.tsx";
+import { ProtectedRoutes } from "@/router/guards/ProtectedRoutes";
+import { PublicRoutes } from "@/router/guards/PublicRoutes";
+import { AuthPage } from '@/pages/AuthPage';
+import { CompleteProfile } from "@/pages/CompleteProfile";
+import { NotFoundPage } from "@/pages/NotFoundPage";
+import { HomePage } from "@/pages/HomePage";
+import { RouterErrorElement } from "@/components/ui/RouterErrorElement";
+import { MainLayout } from "@/layouts/MainLayout";
+import { CreateCategory } from "@/pages/CreateCategory";
+import { RoleGuard } from "@/router/guards/RoleGuard";
+import { EditCategory } from "@/pages/EditCategory";
+import { Navigate } from "react-router-dom";
 
 const routes: RouteObject[] = [
     {
@@ -20,10 +21,6 @@ const routes: RouteObject[] = [
                 index: true,
                 element: <HomePage />,
             },
-            // {
-            //     path: '/unauthorized',
-            //     element: <UnauthorizedPage />,
-            // },
             {
                 element: <PublicRoutes />,
                 children: [
@@ -47,7 +44,9 @@ const routes: RouteObject[] = [
                                 element: <RoleGuard allowedRoles={['ADMIN']} />,
                                 path: '/admin',
                                 children: [
-                                    { path: 'category', element: <CreateCategory /> }
+                                    { index: true, element: <Navigate to="category" replace /> },
+                                    { path: 'category', element: <CreateCategory /> },
+                                    { path: 'category/edit/:categoryId', element: <EditCategory /> }
                                 ],
                             },
                         ],

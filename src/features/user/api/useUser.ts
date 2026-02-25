@@ -1,5 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetProfileResponseSchema, type User } from "@/features/user/schemas/user.schema.ts";
+import {
+    GetProfileResponseSchema,
+    type User
+} from "@/features/user/schemas/user.schema.ts";
 import { apiClient } from "@/services/api-client.ts";
 import { queryKeys } from "@/config/query-keys.ts";
 
