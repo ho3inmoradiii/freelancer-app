@@ -1,16 +1,15 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useGetOtp } from "@/features/auth/api/useGetOtp.ts";
-import { LoginSchema, type Login } from "@/features/auth/schemas/auth.schema.ts";
+import { useGetOtp } from "@/features/auth/api/useGetOtp";
+import { LoginSchema, type Login } from "@/features/auth/schemas/auth.schema";
 import { toast } from "sonner";
-import { type PhoneValue } from "@/features/auth/types/auth.types.ts";
-import { Button } from "@/components/ui/Button.tsx";
-import { TextField } from "@/components/ui/TextField.tsx";
+import { AppButton } from "@/components/ui/AppButton";
+import { TextField } from "@/components/ui/TextField";
 
 type OtpProps = {
     handleSuccessOtp: (phoneNumber: Login['phoneNumber']) => void;
-    currentPhoneNumber: PhoneValue
+    currentPhoneNumber: Login['phoneNumber'] | null
 };
 
 export const SendOtpForm = ({ handleSuccessOtp, currentPhoneNumber }: OtpProps) => {
@@ -33,14 +32,15 @@ export const SendOtpForm = ({ handleSuccessOtp, currentPhoneNumber }: OtpProps) 
     }, [setFocus])
 
     const onSubmit = (data: Login) => {
-        const promise = mutateAsync(data);
+        const promise = mutateAsync(data, {
+            onSuccess: () => {
+                handleSuccessOtp(data.phoneNumber);
+            }
+        });
 
         toast.promise(promise, {
             loading: 'در حال ارسال کد',
-            success: () => {
-                handleSuccessOtp(data.phoneNumber);
-                return "کد تایید با موفقیت ارسال شد";
-            },
+            success: () => "کد تایید با موفقیت ارسال شد",
             error: (err) => {
                 return err.response?.data?.message;
             },
@@ -48,10 +48,10 @@ export const SendOtpForm = ({ handleSuccessOtp, currentPhoneNumber }: OtpProps) 
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <TextField
                 {...register('phoneNumber')}
-                    id="phone-number"
+                id="phone-number"
                 label="شماره تماس"
                 placeholder="0912xxxxxxx"
                 maxLength={11}
@@ -60,13 +60,13 @@ export const SendOtpForm = ({ handleSuccessOtp, currentPhoneNumber }: OtpProps) 
                 disabled={isPending}
             />
 
-            <Button
+            <AppButton
                 type="submit"
                 isLoading={ isPending }
                 disabled={ isPending }
             >
                 ارسال کد تایید
-            </Button>
+            </AppButton>
         </form>
     )
 }

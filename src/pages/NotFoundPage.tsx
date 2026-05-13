@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/Button";
+import { AppButton } from "@/components/ui/AppButton.tsx";
 
 export const NotFoundPage = () => {
     const navigate = useNavigate();
@@ -22,20 +22,20 @@ export const NotFoundPage = () => {
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <Button
+                    <AppButton
                         onClick={() => navigate("/")}
                         className="w-full sm:w-48 h-12"
                     >
                          صفحه اصلی
-                    </Button>
+                    </AppButton>
 
-                    <Button
+                    <AppButton
                         variant="secondary"
                         className="w-full sm:w-48 h-12"
                         onClick={() => navigate(-1)}
                     >
                         صفحه قبلی
-                    </Button>
+                    </AppButton>
                 </div>
 
                 <div className="mt-20 pt-8 border-t border-brand-border">

@@ -1,17 +1,19 @@
-import { useQuery } from "@tanstack/react-query";
-import { queryKeys } from "@/config/query-keys.ts";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { queryKeys } from "@/config/query-keys";
 import {
     type GetCategories,
     GetCategoriesSchema
-} from "@/features/category/schemas/category.schema.ts";
-import { apiClient } from "@/services/api-client.ts";
+} from "@/features/category/schemas/category.schema";
+import { apiClient } from "@/services/api-client";
 
 export const getCategories = async (): Promise<GetCategories> => {
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    // throw new Error("یک خطای عمدی برای تست سیستم مدیریت خطا رخ داد!");
     const response = await apiClient.get('/category/list');
     const result = GetCategoriesSchema.safeParse(response);
 
     if (!result.success) {
-        console.error('[لیست دسته بندی ها]: عدم تطابق ساختار پاسخ تاییدیه:', result.error.format());
+        console.error('[لیست دسته‌بندی‌ها]: عدم تطابق ساختار پاسخ تاییدیه:', result.error.format());
         throw new Error('دیتای گرفته شده با قرارداد Schema مطابقت ندارد!');
     }
 
@@ -19,8 +21,9 @@ export const getCategories = async (): Promise<GetCategories> => {
 }
 
 export const useCategories = () => {
-    return useQuery({
+    return useSuspenseQuery({
         queryKey: queryKeys.category.all,
         queryFn: getCategories,
+        staleTime: 1000 * 60 * 10,
     })
 }

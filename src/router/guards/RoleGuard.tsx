@@ -1,16 +1,15 @@
-import { type Role } from "@/features/user/schemas/user.schema.ts";
-import { useUser } from "@/features/user/api/useUser.ts";
-import { Outlet } from "react-router-dom";
-import { UnauthorizedPage } from "@/pages/UnauthorizedPage.tsx";
+import { Outlet, useOutletContext } from "react-router-dom";
+import type { User, Role } from "@/features/user/schemas/user.schema";
+import { UnauthorizedPage } from "@/pages/UnauthorizedPage";
 
 type RoleGuardProps = {
     allowedRoles: Role[]
 }
 
 export const RoleGuard = ({ allowedRoles }: RoleGuardProps) => {
-    const { data: user } = useUser();
+    const user = useOutletContext<User>();
 
-    if (!allowedRoles.includes(user!.role)) {
+    if (!user || !user.role || !allowedRoles.includes(user.role)) {
         return <UnauthorizedPage />;
     }
 

@@ -1,14 +1,14 @@
-import { useCompleteProfile } from "@/features/user/api/useCompleteProfile.ts";
+import { useCompleteProfile } from "@/features/user/api/useCompleteProfile";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
     type CompleteProfile,
     CompleteProfileSchema
-} from "@/features/user/schemas/user.schema.ts";
+} from "@/features/user/schemas/user.schema";
 import { toast } from "sonner";
-import { TextField } from "@/components/ui/TextField.tsx";
-import { Button } from "@/components/ui/Button.tsx";
-import { RadioGroup } from "@/components/ui/RadioGroup.tsx";
+import { TextField } from "@/components/ui/TextField";
+import { AppButton } from "@/components/ui/AppButton";
+import { RadioGroup } from "@/components/ui/RadioGroup";
 
 type CompleteProfileProps = {
     onCompleteSuccess: () => void
@@ -28,13 +28,14 @@ export const CompleteProfileForm = ({ onCompleteSuccess }: CompleteProfileProps)
     });
 
     const onSubmit = (data: CompleteProfile) => {
-        const promise = mutateAsync(data);
+        const promise = mutateAsync(data, {
+            onSuccess: () => {
+                onCompleteSuccess();
+            }
+        });
         toast.promise(promise, {
             loading: 'در حال ارسال...',
-            success: (res) => {
-                onCompleteSuccess();
-                return res.data.message || "اطلاعات شما با موفقیت بروزرسانی شد";
-            },
+            success: (res) => res.data.message || "اطلاعات شما با موفقیت بروزرسانی شد",
             error: (err) => err.response?.data?.message || "اختلال در سیستم!",
         });
     };
@@ -84,13 +85,13 @@ export const CompleteProfileForm = ({ onCompleteSuccess }: CompleteProfileProps)
                         />
 
                         <div className="pt-4">
-                            <Button
+                            <AppButton
                                 type="submit"
                                 isLoading={isPending}
                                 disabled={isPending}
                             >
                                 تایید و ورود به داشبورد
-                            </Button>
+                            </AppButton>
                         </div>
                     </form>
                 </div>

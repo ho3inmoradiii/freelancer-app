@@ -1,19 +1,18 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckOtpSchema, type CheckOtp, type VerifyOtpResponse } from "@/features/auth/schemas/auth.schema.ts";
-import { type PhoneValue, type UnixTimestamp } from "@/features/auth/types/auth.types.ts";
-import { useCheckOtp } from "@/features/auth/api/useCheckOtp.ts";
-import { Button } from "@/components/ui/Button.tsx";
-import { TextField } from "@/components/ui/TextField.tsx";
-import { useCountdown } from "@/features/auth/hooks/useCountdown.ts";
+import { CheckOtpSchema, type CheckOtp, type Login } from "@/features/auth/schemas/auth.schema";
+import { useCheckOtp } from "@/features/auth/api/useCheckOtp";
+import { AppButton } from "@/components/ui/AppButton";
+import { TextField } from "@/components/ui/TextField";
+import { useCountdown } from "@/features/auth/hooks/useCountdown";
 import { toast } from "sonner";
 
 type VerifyOtpProps = {
     onResendOtp: () => void;
-    phoneNumber: PhoneValue;
-    otpExpiryTime: UnixTimestamp;
+    phoneNumber: Login['phoneNumber'];
+    otpExpiryTime: number | null;
     goToSendOtp: () => void;
-    onVerifySuccess: (res: VerifyOtpResponse) => void;
+    onVerifySuccess: () => void;
 }
 
 export const VerifyOtpForm = ({ onResendOtp, phoneNumber, otpExpiryTime, goToSendOtp, onVerifySuccess }: VerifyOtpProps) => {
@@ -27,19 +26,20 @@ export const VerifyOtpForm = ({ onResendOtp, phoneNumber, otpExpiryTime, goToSen
     } = useForm<CheckOtp>({
         resolver: zodResolver(CheckOtpSchema),
         defaultValues: {
-            phoneNumber: phoneNumber || '',
+            phoneNumber: phoneNumber,
         }
     });
 
     const onSubmit = (data: CheckOtp) => {
-        const promise = mutateAsync(data);
+        const promise = mutateAsync(data, {
+            onSuccess: () => {
+                onVerifySuccess();
+            }
+        });
 
         toast.promise(promise, {
-            loading: 'در حال بررسی کد امنیت...',
-            success: (res) => {
-                onVerifySuccess(res);
-                return "پورتال باز شد! خوش آمدید";
-            },
+            loading: 'در حال بررسی کد...',
+            success: () => "خوش آمدید",
             error: (err) => err.response?.data?.message || "خطا در تایید کد",
         });
     };
@@ -78,13 +78,13 @@ export const VerifyOtpForm = ({ onResendOtp, phoneNumber, otpExpiryTime, goToSen
             />
 
             <div className="space-y-4">
-                <Button
+                <AppButton
                     type="submit"
                     isLoading={isPending}
                     disabled={isPending}
                 >
                     تایید و ورود به سیستم
-                </Button>
+                </AppButton>
 
                 <div className="flex items-center justify-between px-1">
                     <button

@@ -1,5 +1,5 @@
 import { UserCircle, LogOut } from "lucide-react";
-import { type User } from "@/features/user/schemas/user.schema.ts";
+import { type User } from "@/features/user/schemas/user.schema";
 
 type HeaderProps = {
     user: User;
@@ -18,7 +18,7 @@ export const Header = ({ user }: HeaderProps) => {
             <div className="flex items-center gap-6">
                 <div className="flex items-center gap-3 px-3 py-1.5 rounded-full bg-white/5 border border-brand-border">
                     <UserCircle className="w-6 h-6 text-brand-primary" />
-                    <span className="text-sm font-medium text-brand-text-muted">{user.name}</span>
+                    <span className="text-sm font-medium text-brand-text-muted">{user.name || "کاربر مهمان"}</span>
                 </div>
 
                 <button

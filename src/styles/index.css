@@ -167,3 +167,28 @@ html, body {
     @apply bg-background text-foreground;
     }
 }
+
+.custom-calendar-dark .rmdp-calendar {
+    background-color: #121212 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 1rem;
+}
+
+/* روزهای تقویم */
+.custom-calendar-dark .rmdp-day span {
+    color: white !important;
+}
+
+/* ⚡️ هدر تقویم (ماه و سال مثل: اسفند ۱۴۰۴) */
+.custom-calendar-dark .rmdp-header-values span {
+    color: white !important;
+}
+
+/* (اختیاری) رنگ فلش‌های چپ و راست هدر برای همخوانی با تم تیره */
+.custom-calendar-dark .rmdp-arrow {
+    border: solid white !important;
+    border-width: 0 2px 2px 0 !important;
+}
+.custom-calendar-dark .rmdp-arrow-container:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}

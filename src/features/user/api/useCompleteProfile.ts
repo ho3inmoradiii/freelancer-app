@@ -5,8 +5,8 @@ import {
     CompleteProfileResponseSchema,
     type CompleteProfileResponse,
     type CompleteProfile
-} from "@/features/user/schemas/user.schema.ts";
-import { queryKeys } from "@/config/query-keys.ts";
+} from "@/features/user/schemas/user.schema";
+import { queryKeys } from "@/config/query-keys";
 
 export const completeProfile = async (data: CompleteProfile): Promise<CompleteProfileResponse> => {
     const response = await apiClient.post('/user/complete-profile', data);

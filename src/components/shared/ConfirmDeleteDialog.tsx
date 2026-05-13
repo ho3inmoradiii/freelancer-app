@@ -6,32 +6,34 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 
-interface DeleteCategoryDialogProps {
+interface ConfirmDeleteDialogProps {
     isOpen: boolean;
     onClose: () => void;
     onConfirm: () => void;
-    categoryTitle: string;
+    entityName: string;
+    entityType?: string;
     isPending: boolean;
 }
 
-export const DeleteCategoryDialog = ({
-                                         isOpen,
-                                         onClose,
-                                         onConfirm,
-                                         categoryTitle,
-                                         isPending,
-                                     }: DeleteCategoryDialogProps) => {
+export const ConfirmDeleteDialog = ({
+                                        isOpen,
+                                        onClose,
+                                        onConfirm,
+                                        entityName,
+                                        entityType = "آیتم",
+                                        isPending,
+                                    }: ConfirmDeleteDialogProps) => {
     return (
         <AlertDialog open={isOpen} onOpenChange={onClose}>
             <AlertDialogContent className="bg-brand-surface border-brand-border rounded-[2rem]">
                 <AlertDialogHeader>
                     <AlertDialogTitle className="text-white text-right">
-                        آیا از حذف «{categoryTitle}» اطمینان دارید؟
+                        آیا از حذف {entityType} «{entityName}» اطمینان دارید؟
                     </AlertDialogTitle>
                     <AlertDialogDescription className="text-brand-text-muted text-right">
-                        این عملیات غیرقابل بازگشت است و تمام داده‌های مرتبط با این دسته‌بندی حذف خواهند شد.
+                        این عملیات غیرقابل بازگشت است و تمام داده‌های مرتبط با این {entityType} حذف خواهند شد.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter className="flex-row-reverse gap-3">
@@ -39,7 +41,6 @@ export const DeleteCategoryDialog = ({
                         onClick={onConfirm}
                         disabled={isPending}
                         className="bg-red-500 hover:bg-red-600 text-white rounded-xl flex-1 h-12"
-                        isLoading={isPending}
                     >
                         بله، حذف شود
                     </Button>

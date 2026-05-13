@@ -1,23 +1,21 @@
-import { useUser } from "@/features/user/api/useUser.ts";
-import { Navigate, Outlet } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import { FullPageLoader } from "@/components/ui/FullPageLoader.tsx";
+import { useUser } from "@/features/user/api/useUser";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 export const ProtectedRoutes = () => {
     const { pathname } = useLocation();
-    const { data: user, isPending, isError } = useUser();
+    const { data: user } = useUser();
 
-    if (isPending) return <FullPageLoader />;
+    const role = user?.role.toLowerCase();
 
-    if (isError || !user) return <Navigate to="/auth" replace />;
+    if (!user) return <Navigate to="/auth" replace />;
 
     if (!user.isActive && pathname !== '/complete-profile') {
         return <Navigate to="/complete-profile" replace />;
     }
 
     if (user.isActive && pathname === '/complete-profile') {
-        return <Navigate to="/dashboard" replace />;
+        return <Navigate to={`/${role}`} replace />;
     }
 
-    return <Outlet />;
+    return <Outlet context={ user } />;
 };

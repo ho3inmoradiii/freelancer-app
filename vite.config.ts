@@ -3,8 +3,6 @@ import path from 'path'
 import react from '@vitejs/plugin-react'
 import tailwindcss from "@tailwindcss/vite"
 
-console.log(path.resolve(__dirname,"./src"), 'fffffffffffff')
-
 export default defineConfig({
   plugins: [
       react(),

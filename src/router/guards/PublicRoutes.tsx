@@ -1,14 +1,13 @@
-import { useUser } from "@/features/user/api/useUser.ts";
+import { useUser } from "@/features/user/api/useUser";
 import { Navigate, Outlet } from "react-router-dom";
-import { FullPageLoader } from "@/components/ui/FullPageLoader.tsx";
 
 export const PublicRoutes = () => {
-    const { data: user, isPending, isSuccess } = useUser();
+    const { data: user } = useUser();
 
-    if (isPending) return <FullPageLoader />;
+    const role = user?.role.toLowerCase();
 
-    if (isSuccess && user) {
-        return <Navigate to={user.isActive ? "/dashboard" : "/complete-profile"} replace />;
+    if (user) {
+        return <Navigate to={user.isActive ? `/${role}` : "/complete-profile"} replace />;
     }
 
     return <Outlet />;

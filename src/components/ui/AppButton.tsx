@@ -1,6 +1,6 @@
-import { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/utils/cn";
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
     "cursor-pointer relative w-full pt-[14px] pb-[10px] px-6 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2 overflow-hidden active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed",
@@ -24,7 +24,7 @@ interface ButtonProps
     children: ReactNode;
 }
 
-export const Button = ({ isLoading, variant, className, children, ...props }: ButtonProps) => {
+export const AppButton = ({ isLoading, variant, className, children, ...props }: ButtonProps) => {
     return (
         <button
             className={cn(buttonVariants({ variant }), className)}

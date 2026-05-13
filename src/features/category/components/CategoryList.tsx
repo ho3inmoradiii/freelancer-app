@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { useCategories } from "@/features/category/api/useCategories.ts";
-import { Loader2, AlertCircle, Edit2, Trash2, ListTree, Database } from "lucide-react";
-import { cn } from "@/utils/cn";
+import { useCategories } from "@/features/category/api/useCategories";
+import { Edit2, Trash2, ListTree, Database } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
-import { useDeleteCategory } from "@/features/category/api/useDeleteCategory.ts";
+import { useDeleteCategory } from "@/features/category/api/useDeleteCategory";
 import { toast } from "sonner";
-import { DeleteCategoryDialog } from "@/features/category/components/DeleteCategoryDialog.tsx";
+import { ConfirmDeleteDialog } from "@/components/shared/ConfirmDeleteDialog";
 
 export const CategoryList = () => {
     const navigate = useNavigate();
     const { mutateAsync, isPending } = useDeleteCategory();
-    const { data: response, isLoading, isError, error } = useCategories();
+
+    const { data: response } = useCategories();
     const categories = response?.data?.categories || [];
     const [deleteId, setDeleteId] = useState<string | null>(null);
 
@@ -20,14 +21,15 @@ export const CategoryList = () => {
 
     const deleteCategory = () => {
         if (deleteId) {
-            const promise = mutateAsync(deleteId);
+            const promise = mutateAsync(deleteId, {
+                onSuccess: () => {
+                    setDeleteId(null);
+                }
+            });
 
             toast.promise(promise, {
-                loading: 'در حال حذف دسته بندی',
-                success: (res) => {
-                    setDeleteId(null);
-                    return res?.data?.message;
-                },
+                loading: 'در حال حذف دسته‌بندی',
+                success: (res) => res?.data?.message || 'با موفقیت حذف شد',
                 error: (err) => {
                     return err.response?.data?.message;
                 },
@@ -35,42 +37,16 @@ export const CategoryList = () => {
         }
     }
 
-    if (isLoading) {
-        return (
-            <div className="flex flex-col items-center justify-center p-32 space-y-6">
-                <div className="relative">
-                    <Loader2 className="w-12 h-12 text-brand-primary animate-spin" />
-                    <div className="absolute inset-0 bg-brand-primary/20 blur-xl rounded-full animate-pulse" />
-                </div>
-                <p className="text-brand-text-muted font-medium tracking-wide">در حال فراخوانیِ هسته‌هایِ داده...</p>
-            </div>
-        );
-    }
-
-    if (isError) {
-        return (
-            <div className="mx-auto max-w-2xl mt-10 p-6 bg-red-500/5 border border-red-500/20 rounded-3xl flex items-center gap-5 text-red-400">
-                <div className="p-3 bg-red-500/10 rounded-2xl">
-                    <AlertCircle className="w-6 h-6" />
-                </div>
-                <div className="flex flex-col">
-                    <span className="font-bold text-sm">خطای سیستمی</span>
-                    <p className="text-xs opacity-80">{error instanceof Error ? error.message : 'اختلال در بازیابی اطلاعات'}</p>
-                </div>
-            </div>
-        );
-    }
-
     return (
-        <div className="mt-16 space-y-6">
-            <div className="flex items-center justify-between px-4">
+        <div className="space-y-6">
+            <div className="flex items-center justify-between ">
                 <div className="flex items-center gap-3">
                     <ListTree className="w-5 h-5 text-brand-primary" />
                     <h3 className="text-xl font-bold text-white">لیست دسته‌بندی‌های موجود</h3>
                 </div>
                 <div className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-brand-border">
                     <Database className="w-3.5 h-3.5 text-brand-text-muted" />
-                    <span className="text-xs font-mono text-brand-text-muted">{categories.length} Entities</span>
+                    <span className="text-xs font-mono text-brand-text-muted">{categories.length} دسته‌بندی</span>
                 </div>
             </div>
 
@@ -142,11 +118,12 @@ export const CategoryList = () => {
                 )}
             </div>
 
-            <DeleteCategoryDialog
+            <ConfirmDeleteDialog
                 isOpen={!!deleteId}
                 onClose={() => setDeleteId(null)}
                 onConfirm={deleteCategory}
-                categoryTitle={categories.find(c => c._id === deleteId)?.title || ""}
+                entityName={categories.find(c => c._id === deleteId)?.title || ""}
+                entityType="دسته‌بندی"
                 isPending={isPending}
             />
         </div>

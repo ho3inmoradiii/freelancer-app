@@ -1,4 +1,4 @@
-import { Button } from "./Button";
+import { AppButton } from "./AppButton.tsx";
 
 interface ErrorUIProps {
     errorMessage: string;
@@ -22,9 +22,9 @@ export const ErrorUI = ({ errorMessage, onReset }: ErrorUIProps) => {
                 <pre className="text-[10px] text-red-400 bg-red-500/5 p-4 rounded-lg mb-8 overflow-auto max-h-32 font-mono border border-red-500/10 text-center">
                     {errorMessage}
                 </pre>
-                <Button onClick={onReset} className="w-full h-12">
+                <AppButton onClick={onReset} className="w-full h-12">
                     تلاش مجدد
-                </Button>
+                </AppButton>
             </div>
         </div>
     );

@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { SIDEBAR_CONFIG } from "@/config/navigation.ts";
-import { cn } from "@/utils/cn.ts";
-import { type User } from "@/features/user/schemas/user.schema.ts";
+import { SIDEBAR_CONFIG } from "@/config/navigation";
+import { cn } from "@/lib/utils";
+import { type User } from "@/features/user/schemas/user.schema";
 
 type SidebarProps = {
     user: User;
@@ -13,13 +13,9 @@ export const Sidebar = ({ user }: SidebarProps) => {
 
     return (
         <aside className="w-64 bg-brand-surface/30 border-l border-brand-border hidden lg:flex flex-col p-6 gap-8">
-            <div className="text-[10px] font-black text-brand-text-muted uppercase tracking-[0.3em] px-4">
-                Main Menu
-            </div>
-
             <nav className="flex flex-col gap-3">
                 {sidebarItems.map((item) => {
-                    const isActive = pathname === item.href;
+                    const isActive = pathname.startsWith(item.href);
                     return (
                         <Link
                             key={item.href}

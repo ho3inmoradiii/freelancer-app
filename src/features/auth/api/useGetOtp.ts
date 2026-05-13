@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { apiClient } from "@/services/api-client";
-import { type Login, type OtpResponse, OtpResponseSchema } from "@/features/auth/schemas/auth.schema.ts";
-import {isAxiosError} from "axios";
+import { type Login, type OtpResponse, OtpResponseSchema } from "@/features/auth/schemas/auth.schema";
+import { isAxiosError } from "axios";
 
 export const getOtp = async (data: Login): Promise<OtpResponse> => {
     const response = await apiClient.post('/user/get-otp', data);

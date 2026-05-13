@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
-import { type Category, CategorySchema, type Categories, type CategoryResponse } from "@/features/category/schemas/category.schema.ts";
+import { type Category, CategorySchema, type Categories } from "@/features/category/schemas/category.schema";
+import { type SuccessMessageResponse } from "@/lib/schemas/api.schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TextField } from "@/components/ui/TextField.tsx";
-import { Button } from "@/components/ui/Button.tsx";
-import { RadioGroup } from "@/components/ui/RadioGroup.tsx";
+import { TextField } from "@/components/ui/TextField";
+import { AppButton } from "@/components/ui/AppButton";
+import { RadioGroup } from "@/components/ui/RadioGroup";
 import { Tag, Plus, Info } from "lucide-react";
 
 type CreateCategoryFormProps = {
@@ -13,7 +14,7 @@ type CreateCategoryFormProps = {
     formSubtitle?: string;
     selectedCategory?: Categories;
     btnText?: string;
-    onSubmitAction: (data: Category) => Promise<CategoryResponse>;
+    onSubmitAction: (data: Category) => Promise<SuccessMessageResponse>;
     isLoading?: boolean;
     onSuccessCallback?: () => void;
 }
@@ -37,14 +38,15 @@ export const CreateCategoryForm = ({ formTitle, formSubtitle, selectedCategory, 
     }, [selectedCategory, reset]);
 
     const onSubmit = (data: Category) => {
-        const promise = onSubmitAction(data);
+        const promise = onSubmitAction(data).then((res) => {
+            if (!selectedCategory) reset();
+            if (onSuccessCallback) onSuccessCallback();
+            return res;
+        });
+
         toast.promise(promise, {
             loading: 'در حال ارسال اطلاعات',
-            success: (res) => {
-                if (!selectedCategory) reset();
-                if (onSuccessCallback) onSuccessCallback();
-                return res.data.message || "دسته بندی با موفقیت ثبت شد";
-            },
+            success: (res) => res.data.message || "دسته‌بندی با موفقیت ثبت شد",
             error: (err) => err.response?.data?.message || "اختلال در سیستم فرستنده!",
         });
     };
@@ -84,7 +86,7 @@ export const CreateCategoryForm = ({ formTitle, formSubtitle, selectedCategory, 
                     <TextField
                         {...register('description')}
                         label="توضیحات تکمیلی"
-                        placeholder="در مورد این دسته بندی کمی بنویسید..."
+                        placeholder="در مورد این دسته‌بندی کمی بنویسید..."
                         error={errors.description?.message}
                     />
 
@@ -117,15 +119,15 @@ export const CreateCategoryForm = ({ formTitle, formSubtitle, selectedCategory, 
                         <span>ورودی‌ها بر اساس استانداردهای سیستمی بررسی می‌شوند.</span>
                     </div>
 
-                    <Button
+                    <AppButton
                         type="submit"
                         isLoading={isLoading}
                         disabled={isLoading}
                         className="w-full sm:w-64 h-14 text-lg shadow-lg shadow-brand-primary/20"
                     >
                         <Plus className="w-5 h-5 ml-2" />
-                        { btnText ? btnText : 'ثبت دسته بندی' }
-                    </Button>
+                        { btnText ? btnText : 'ثبت دسته‌بندی' }
+                    </AppButton>
                 </div>
             </form>
         </div>

@@ -1,6 +1,6 @@
-import { forwardRef, InputHTMLAttributes } from "react";
+import { forwardRef, type InputHTMLAttributes } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/utils/cn";
+import { cn } from "@/lib/utils";
 
 const radioVariants = cva(
     "w-5 h-5 cursor-pointer appearance-none rounded-full border-2 transition-all duration-300 outline-none bg-brand-surface relative peer",

@@ -1,5 +1,5 @@
 import { Radio } from "./RadioButton";
-import { cn } from "@/utils/cn.ts";
+import { cn } from "@/lib/utils";
 
 interface RadioOption {
     label: string;

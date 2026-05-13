@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/Button";
+import { AppButton } from "@/components/ui/AppButton.tsx";
 
 export const HomePage = () => {
     const navigate = useNavigate();
@@ -31,20 +31,20 @@ export const HomePage = () => {
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-                    <Button
+                    <AppButton
                         onClick={() => navigate("/auth")}
                         className="w-full sm:w-56 h-14 text-lg shadow-xl shadow-brand-primary/15"
                     >
                         ورود به پورتال
-                    </Button>
+                    </AppButton>
 
-                    <Button
+                    <AppButton
                         variant="secondary"
                         className="w-full sm:w-56 h-14 text-lg border-brand-border"
                         onClick={() => window.open('https://github.com/ho3inmoradiii', '_blank')}
                     >
                         مشاهده سورس‌کد
-                    </Button>
+                    </AppButton>
                 </div>
             </main>
 

@@ -5,8 +5,8 @@ import {
     type CheckOtp,
     type VerifyOtpResponse,
     VerifyOtpResponseSchema
-} from "@/features/auth/schemas/auth.schema.ts";
-import { queryKeys } from "@/config/query-keys.ts";
+} from "@/features/auth/schemas/auth.schema";
+import { queryKeys } from "@/config/query-keys";
 
 export const checkOtp = async (data: CheckOtp): Promise<VerifyOtpResponse> => {
     const response = await apiClient.post('/user/check-otp', data);

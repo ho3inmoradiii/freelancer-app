@@ -10,5 +10,8 @@ export const GlobalErrorFallback = ({ error, resetErrorBoundary }: FallbackProps
         }
     };
 
-    return <ErrorUI errorMessage={error?.message || "خطای بحرانی"} onReset={handleReset} />;
+    const errorMessage =
+        error instanceof Error ? error.message : "خطای بحرانی";
+
+    return <ErrorUI errorMessage={errorMessage} onReset={handleReset} />;
 };
